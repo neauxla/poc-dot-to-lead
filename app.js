@@ -4,6 +4,7 @@ let bodyParser = require('body-parser');
 let ejs = require('ejs');
 let session = require('express-session');
 let DOTService = require('./services/CompanyData');
+let SFDCService = require('./services/SalesforceService.js');
 
 // Set app options
 app.set('view engine', 'ejs');
@@ -52,7 +53,18 @@ app.post('/', function(req, res) {
     } else if(req.body.hasOwnProperty('create')) {
         // Create Lead
         console.log('Save', req.session.company);
-        res.render('index', {company: null});
+
+        // Call salesforce
+        SFDCService.createLead(req.session.company, function(err, result) {
+            if(err) {
+                // handle error
+                res.render('index', {company: null, msg: err});
+            } else {
+                // Render success
+                res.render('index', {company: null, msg: 'Success!', id: null});
+            }
+        })
+        
     } else {
         // Dunno...
         return res.send('Wha?');
