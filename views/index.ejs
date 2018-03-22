@@ -2,10 +2,13 @@
 <p>Some info here...</p>
 <form method="post" action="/">
     <input type="text" name="DOT_NUMBER" placeholder="DOT12345678"/>
-    <input type="submit" name="submit" value="Search..."/>
+    <input type="submit" name="search" value="Search..."/>
 </form>
-<pre>
-    <% if(company !== undefined) { %>
-        <%= company %>
-    <% } %>
-</pre>
+
+<% if(company) { %>
+    <h3>Company Found:</h3>
+    <pre><%= company %></pre>
+    <form method="post" action="/">
+        <input type="submit" name="create" value="Create Lead"/>
+    </form>    
+<% } %>

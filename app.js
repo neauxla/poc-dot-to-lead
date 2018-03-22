@@ -2,12 +2,19 @@
 let app = require('express')();
 let bodyParser = require('body-parser');
 let ejs = require('ejs');
-let nforce = require('nforce');
+let session = require('express-session');
 let DOTService = require('./services/CompanyData');
 
-// Set view engine
+// Set app options
 app.set('view engine', 'ejs');
 app.set('views', './views');
+app.set('trust proxy', 1);
+app.use(session({
+    secret: 'somekey',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}))
 
 // Set body parsing
 app.use(bodyParser.json()); // for parsing application/json
@@ -20,21 +27,37 @@ app.get('/', function(req, res) {
 
 // Handle search
 app.post('/', function(req, res) {
-    // Get form input
-    const DOT_Number = req.body.DOT_NUMBER;
+    // Determine operation
+    console.log(req.body);
+    if(req.body.hasOwnProperty('search')) {
+        // Do search...
+        // Get form input
+        const DOT_Number = req.body.DOT_NUMBER;
 
-    // Get company data from service
-    DOTService.getCompanyByDOTNumber(DOT_Number, function(err, result) {
-        // Check response
-        if(err) {
-            // respond to error
-            return res.send(err);
-        } else {
-            // Format result resp
-            console.log(result);
-            return res.render('index', {company: JSON.stringify(result, null, 2)});
-        }
-    })
+        // Get company data from service
+        DOTService.getCompanyByDOTNumber(DOT_Number, function(err, result) {
+            // Check response
+            if(err) {
+                // respond to error
+                return res.send(err);
+            } else {
+                // Save to session
+                req.session.company = result;
+
+                // Format result resp
+                console.log(result);
+                return res.render('index', {company: JSON.stringify(result, null, 2)});
+            }
+        })
+    } else if(req.body.hasOwnProperty('create')) {
+        // Create Lead
+        console.log('Save', req.session.company);
+        res.render('index', {company: null});
+    } else {
+        // Dunno...
+        return res.send('Wha?');
+    }
+    
 })
 
 app.listen(3000, function() {
