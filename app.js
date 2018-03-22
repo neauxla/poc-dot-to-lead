@@ -8,4 +8,16 @@ let DOTService = require('./services/CompanyData');
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-console.log('Hellerrrr');
+// Home page routing
+app.get('/', function(req, res) {
+    res.render('index');
+})
+
+
+app.post('/', function(req, res) {
+    
+})
+
+app.listen(3000, function() {
+    console.log('App running on port 3000');
+})
