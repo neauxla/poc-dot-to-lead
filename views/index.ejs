@@ -1,1 +1,11 @@
 <h1>Lookup Company by DOT Number</h1>
+<p>Some info here...</p>
+<form method="post" action="/">
+    <input type="text" name="DOT_NUMBER" placeholder="DOT12345678"/>
+    <input type="submit" name="submit" value="Search..."/>
+</form>
+<pre>
+    <% if(company !== undefined) { %>
+        <%= company %>
+    <% } %>
+</pre>
