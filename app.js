@@ -58,10 +58,10 @@ app.post('/', function(req, res) {
         SFDCService.createLead(req.session.company, function(err, result) {
             if(err) {
                 // handle error
-                res.render('index', {company: null, msg: err});
+                res.render('index', {company: err, msg: err});
             } else {
                 // Render success
-                res.render('index', {company: null, msg: 'Success!', id: null});
+                res.render('index', {company: result, msg: 'Success!', id: null});
             }
         })
         
