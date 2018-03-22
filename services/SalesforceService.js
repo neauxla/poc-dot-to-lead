@@ -18,7 +18,9 @@ module.exports = {
 
         // Make lead
         var acc = nforce.createSObject('Lead');
-        acc.set('Name', companyData.Carrier);
+        acc.set('LastName', companyData.Carrier);
+        acc.set('Company', companyData.Carrier);
+        acc.set('Status', 'Open - Not Contacted');
         acc.set('Phone', companyData.Phone);
 
         org.insert({ sobject: acc, oauth: org.oauth }, callback);
